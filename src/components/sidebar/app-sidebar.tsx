@@ -9,31 +9,32 @@ import { Role } from "@/global/constent";
 import { LayoutDashboard, User, NotepadText, Calendar1 } from "lucide-react";
 import CustomFooter from "./sideBarPopover";
 import Link from "next/link";
+import { userCookieInterface } from "../../..";
 
 const sidebarItems = [
   {
     icon: LayoutDashboard,
     label: "Dashboard",
-    href: "/d",
-    roles: [Role.ADMIN, Role.STAFF, Role.STUDENT],
+    href: "/dashboard",
+    roles: [Role.ADMIN, Role.STAFF, Role.STUDENT, Role.HOD],
   },
   {
     icon: User,
     label: "All Users",
     href: "/users",
-    roles: [Role.ADMIN],
+    roles: [Role.ADMIN, Role.HOD],
   },
   {
     icon: NotepadText,
     label: "Leaves",
     href: "/leaves",
-    roles: [Role.STUDENT],
+    roles: [Role.STUDENT, Role.STAFF],
   },
   {
     icon: Calendar1,
     label: "Leave Requests",
     href: "/leave-requests",
-    roles: [Role.ADMIN, Role.STAFF],
+    roles: [Role.ADMIN, Role.STAFF, Role.HOD],
   },
 ];
 
@@ -43,8 +44,6 @@ export function AppSidebar(user: userCookieInterface) {
     item.roles.includes(role as Role)
   );
 
-  const customLink = `http://localhost:3000/dashboard/${user.id}`;
-
   return (
     <Sidebar>
       <SidebarHeader>Menu</SidebarHeader>
@@ -53,7 +52,7 @@ export function AppSidebar(user: userCookieInterface) {
           {filteredItems.map((item, index) => (
             <Link
               key={index}
-              href={`${customLink}${item.href}`}
+              href={`${item.href}`}
               className="flex items-center p-2 space-x-2"
             >
               <item.icon className="w-5 h-5" />

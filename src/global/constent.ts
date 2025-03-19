@@ -5,12 +5,24 @@ export const enum Deparment {
 }
 
 export const enum Role {
-  STUDENT = "3",
-  STAFF = "2",
+  STUDENT = "4",
+  STAFF = "3",
   ADMIN = "1",
+  HOD = "2",
 }
 
 export const enum Gender {
   MALE = "MALE",
   FEMALE = "FEMALE",
+}
+
+export const enum LeaveStatus {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+}
+
+export const enum LeaveType {
+  HALF_DAY = "HALF_DAY",
+  FULL_DAY = "FULL_DAY",
 }

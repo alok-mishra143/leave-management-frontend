@@ -52,7 +52,7 @@ const AddUser = () => {
       department: undefined,
       address: "",
       gender: undefined,
-      roleId: "3",
+      roleId: Role.STUDENT,
       phone: "",
       password: "",
     },
@@ -220,6 +220,7 @@ const AddUser = () => {
                       <SelectGroup>
                         <SelectItem value={Role.ADMIN}>Admin</SelectItem>
                         <SelectItem value={Role.STAFF}>Staff</SelectItem>
+                        <SelectItem value={Role.HOD}>HOD</SelectItem>
                         <SelectItem value={Role.STUDENT}>Student</SelectItem>
                       </SelectGroup>
                     </SelectContent>

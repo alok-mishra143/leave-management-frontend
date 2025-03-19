@@ -11,6 +11,7 @@ import { LogOut, Settings, ChevronsUpDown } from "lucide-react";
 import axiosInstance from "@/lib/customAxiosInstence";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { userCookieInterface } from "../../..";
 
 const CustomFooter = ({ user }: { user: userCookieInterface }) => {
   const router = useRouter();

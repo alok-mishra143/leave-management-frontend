@@ -33,8 +33,9 @@ const CustomPagination: React.FC<{ pagination: PaginationProps }> = ({
   const searchParams = useSearchParams();
 
   // Extract initial values from URL (or fallback to props)
-  const currentPage = Number(searchParams.get("page")) || pagination.page;
-  const currentLimit = Number(searchParams.get("limit")) || pagination.limit;
+  const currentPage = Number(searchParams.get("page")) || pagination.page || 1;
+  const currentLimit =
+    Number(searchParams.get("limit")) || pagination.limit || 10;
   const totalPages = Math.ceil(pagination.total / currentLimit);
 
   // Update the URL when values change

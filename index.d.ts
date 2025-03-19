@@ -1,4 +1,4 @@
-import { Deparment, Gender } from "@/global/constent";
+import { Deparment, Gender, LeaveStatus, LeaveType } from "@/global/constent";
 
 interface userCookieInterface {
   id: string;
@@ -24,7 +24,7 @@ interface User {
   roleId: string;
   address: string;
 }
-interface Response {
+interface AllUsersProps {
   message: string;
   data: User[];
   pagination: pagination;
@@ -34,4 +34,31 @@ interface pagination {
   total: number;
   limit: number;
   page: number;
+}
+
+interface leaveRequestapplyProps {
+  id: string;
+  user: {
+    name: string;
+    email: string;
+  };
+  requestedTo: {
+    name: string;
+    email: string;
+  };
+  approvedBy: {
+    name: string;
+    email: string;
+  } | null;
+
+  status: LeaveStatus.PENDING | LeaveStatus.APPROVED | LeaveStatus.REJECTED;
+  reason: string;
+  startDate: string;
+  endDate: string;
+  leaveType: LeaveType.FULL_DAY | LeaveType.HALF_DAY;
+}
+
+interface leaveRequestsProps {
+  pagination: pagination;
+  data: leaveRequestapplyProps[];
 }

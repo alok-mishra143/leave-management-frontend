@@ -64,7 +64,6 @@ const UserEditDialog = ({ user }: { user: User }) => {
 
     try {
       const token = await getCookie("token");
-      console.log("Updated User Data:", data);
       // Simulate API call (Replace with actual API call)
       const resp = await axiosInstance.patch(`/user/${user.id}`, data, {
         headers: {

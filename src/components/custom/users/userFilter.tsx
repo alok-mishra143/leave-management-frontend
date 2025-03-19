@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { Input } from "@/components/ui/input";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Search } from "lucide-react";
 import {
   Select,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Role } from "@/global/constent";
 import { useRouter, useSearchParams } from "next/navigation";
+import { debounce } from "lodash";
 
 const filterOptions = [
   { value: "All", label: "All" },
@@ -38,13 +39,7 @@ const Filter = () => {
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      updateParams(selectedValue, searchValue);
-    }, 100);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [selectedValue, searchValue]);
+  const debouncedUpdateParams = useCallback(debounce(updateParams, 100), []);
 
   return (
     <div className="flex flex-col sm:flex-row items-center gap-4 sm:justify-between">
@@ -58,11 +53,20 @@ const Filter = () => {
           placeholder="Search..."
           aria-label="Search"
           value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setSearchValue(e.target.value);
+            debouncedUpdateParams(selectedValue, e.target.value);
+          }}
         />
       </div>
 
-      <Select value={selectedValue} onValueChange={setSelectedValue}>
+      <Select
+        value={selectedValue}
+        onValueChange={(newRole: string) => {
+          setSelectedValue(newRole);
+          updateParams(newRole, searchValue);
+        }}
+      >
         <SelectTrigger className="w-full sm:w-52 rounded-md border border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition">
           <SelectValue placeholder="All" />
         </SelectTrigger>

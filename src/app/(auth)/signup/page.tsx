@@ -50,14 +50,13 @@ const Signup = () => {
       password: "",
       department: undefined,
       address: "",
-      phone: 0,
+      phone: "",
     },
   });
 
   const onSubmit = async (data: z.infer<typeof signupValidationStudent>) => {
     setLoading(true);
     try {
-      console.log("Submitting data:", data);
 
       await axiosInstance.post("/register", data);
 

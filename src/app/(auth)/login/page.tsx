@@ -42,15 +42,12 @@ const Login = () => {
   const onSubmit = async (data: z.infer<typeof loginValidation>) => {
     setLoading(true);
     try {
-      console.log("Submitting data:", data);
 
       await axiosInstance.post("/login", data);
 
       toast.success("Login successful");
 
-      const user = await axiosInstance.post("/verify");
-
-      router.push(`/dashboard/${user.data.user.id}`);
+      router.push(`/dashboard`);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data?.error || "Login failed");

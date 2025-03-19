@@ -3,6 +3,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import axiosInstance from "@/lib/customAxiosInstence";
 import { cookies } from "next/headers";
 import React from "react";
+import { userCookieInterface } from "../../..";
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies();
