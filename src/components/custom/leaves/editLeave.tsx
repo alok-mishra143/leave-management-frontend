@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { getCookie } from "@/global/getCookie";
 import { applyLeaveValidation } from "@/lib/validations/applyLeaveValidation";
+import { Pen } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -36,13 +37,16 @@ import {
 } from "@/components/ui/select";
 import { Deparment, LeaveType } from "@/global/constent";
 import { useRouter } from "next/navigation";
+import { LeaveSchema } from "../../../..";
+import { Input } from "@/components/ui/input";
 
 interface Teacher {
   id: string;
   name: string;
 }
 
-const ApplyLeave = () => {
+const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
+  console.log(myLeave);
   const router = useRouter();
   const [allTeachers, setAllTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState(false);
@@ -51,13 +55,23 @@ const ApplyLeave = () => {
   const form = useForm<z.infer<typeof applyLeaveValidation>>({
     resolver: zodResolver(applyLeaveValidation),
     defaultValues: {
-      startDate: "",
-      endDate: "",
-      leaveType: undefined,
-      reason: "",
-      requestedTo: "",
+      startDate: myLeave.startDate.split("T")[0],
+      endDate: myLeave.endDate.split("T")[0],
+      leaveType: myLeave.leaveType,
+      reason: myLeave.reason,
+      requestedTo: myLeave.requestedTo.id,
     },
   });
+
+  useEffect(() => {
+    form.reset({
+      startDate: myLeave.startDate.split("T")[0],
+      endDate: myLeave.endDate.split("T")[0],
+      leaveType: myLeave.leaveType,
+      reason: myLeave.reason,
+      requestedTo: myLeave.requestedTo.id,
+    });
+  }, [myLeave, form]);
 
   const getUserDetails = async () => {
     try {
@@ -100,12 +114,13 @@ const ApplyLeave = () => {
   const onSubmit = async (data: z.infer<typeof applyLeaveValidation>) => {
     setLoading(true);
     try {
+      console.log("update request submitted:", data);
       const user = await getUserDetails();
       const token = await getCookie("token");
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/apply-leave/${user.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/edit-leave/${myLeave.id}`,
         {
-          method: "POST",
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             token: token,
@@ -116,7 +131,7 @@ const ApplyLeave = () => {
         }
       );
       const response = await res.json();
-      console.log("Leave request submitted:", response);
+      console.log("update request submitted:", response);
 
       // Reset form and close modal
       form.reset();
@@ -133,7 +148,9 @@ const ApplyLeave = () => {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline">Apply Leave</Button>
+          <Button variant="ghost">
+            <Pen />
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[505px]">
           <DialogHeader>
@@ -184,7 +201,7 @@ const ApplyLeave = () => {
                       <FormItem className="w-1/2">
                         <FormLabel>Start Date</FormLabel>
                         <FormControl>
-                          <input
+                          <Input
                             type="date"
                             {...field}
                             value={field.value}
@@ -204,7 +221,7 @@ const ApplyLeave = () => {
                       <FormItem className="w-1/2">
                         <FormLabel>End Date</FormLabel>
                         <FormControl>
-                          <input
+                          <Input
                             type="date"
                             {...field}
                             value={field.value}
@@ -291,7 +308,11 @@ const ApplyLeave = () => {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      setOpen(false);
+
+                      form.reset();
+                    }}
                   >
                     Cancel
                   </Button>
@@ -308,4 +329,4 @@ const ApplyLeave = () => {
   );
 };
 
-export default ApplyLeave;
+export default EditLeave;

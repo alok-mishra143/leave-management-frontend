@@ -24,6 +24,13 @@ interface User {
   roleId: string;
   address: string;
 }
+
+type UserSettingsProps = Omit<User, "status" | "role"> & {
+  role: {
+    id: string;
+    name: string;
+  };
+};
 interface AllUsersProps {
   message: string;
   data: User[];
@@ -61,4 +68,16 @@ interface leaveRequestapplyProps {
 interface leaveRequestsProps {
   pagination: pagination;
   data: leaveRequestapplyProps[];
+}
+
+export interface LeaveSchema {
+  id: string;
+  requestedTo: { name: string; id: string };
+  approvedBy?: { name: string } | null;
+  startDate: string;
+  endDate: string;
+  status: LeaveStatus;
+  leaveType: LeaveType;
+  reason: string;
+  createdAt: string;
 }

@@ -72,8 +72,14 @@ const LeaveTable = ({ Leaves }: { Leaves: leaveRequestsProps }) => {
               <TableCell>{leave.user.email}</TableCell>
               <TableCell>{leave.leaveType as LeaveType}</TableCell>
               <TableCell>{leave.reason}</TableCell>
-              <TableCell>{leave.startDate}</TableCell>
-              <TableCell>{leave.endDate}</TableCell>
+              <TableCell>
+                {" "}
+                {new Date(leave.startDate).toLocaleDateString()}
+              </TableCell>
+              <TableCell>
+                {" "}
+                {new Date(leave.endDate).toLocaleDateString()}
+              </TableCell>
               <TableCell>
                 <LeaveBadge status={leave.status} />
               </TableCell>

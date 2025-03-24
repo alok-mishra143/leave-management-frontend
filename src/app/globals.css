@@ -141,3 +141,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.sx-react-calendar-wrapper {
+  height: 94vh;
+}

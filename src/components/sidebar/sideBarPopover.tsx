@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { userCookieInterface } from "../../..";
 
 const CustomFooter = ({ user }: { user: userCookieInterface }) => {
+  const [open, setOpen] = React.useState(false);
   const router = useRouter();
 
   const currentUser = user;
@@ -31,7 +32,7 @@ const CustomFooter = ({ user }: { user: userCookieInterface }) => {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <Popover>
+        <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <SidebarMenuButton className="flex items-center justify-between rounded-lg px-3 py-2 transition hover:bg-accent focus:ring-2 focus:ring-ring ">
               <div className="flex items-center space-x-3">
@@ -79,7 +80,11 @@ const CustomFooter = ({ user }: { user: userCookieInterface }) => {
               <Button
                 variant="ghost"
                 size="sm"
-                className="justify-start hover:bg-accent"
+                className="justify-start hover:bg-accent cursor-pointer"
+                onClick={() => {
+                  router.push("/settings");
+                  setOpen(false);
+                }}
               >
                 <Settings className="mr-2 h-4 w-4" />
                 Settings

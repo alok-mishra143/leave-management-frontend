@@ -4,6 +4,8 @@ import axiosInstance from "@/lib/customAxiosInstence";
 import { cookies } from "next/headers";
 import React from "react";
 import { userCookieInterface } from "../../..";
+import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const layout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies();
@@ -17,8 +19,17 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
     <div>
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar {...User} />
-        <main className="w-full h-screen ">
-          <SidebarTrigger />
+
+        <main className="w-full overflow-hidden ">
+          <header className="p-1 flex gap-2 flex-col">
+            {" "}
+            <div className="flex justify-between items-center">
+              {" "}
+              <SidebarTrigger />
+              <ThemeToggle />
+            </div>
+            <Separator />
+          </header>
           {children}
         </main>
       </SidebarProvider>

@@ -9,36 +9,47 @@ const Page = async ({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value || "";
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value || "";
 
-  const { roleID, search, limit, page, sort, col } = await searchParams;
+    const { roleID, search, limit, page, sort, col } = await searchParams;
 
-  const queryParams = new URLSearchParams();
+    const queryParams = new URLSearchParams();
 
-  if (roleID) queryParams.append("roleID", String(roleID));
-  if (search) queryParams.append("search", String(search));
-  if (limit) queryParams.append("limit", String(limit));
-  if (page) queryParams.append("page", String(page));
-  if (sort) queryParams.append("sort", String(sort));
-  if (col) queryParams.append("col", String(col));
+    if (roleID) queryParams.append("roleID", String(roleID));
+    if (search) queryParams.append("search", String(search));
+    if (limit) queryParams.append("limit", String(limit));
+    if (page) queryParams.append("page", String(page));
+    if (sort) queryParams.append("sort", String(sort));
+    if (col) queryParams.append("col", String(col));
 
-  const allUser = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL!}/users?${queryParams.toString()}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        token: `${token}`,
-      },
+    const allUser = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL!}/users?${queryParams.toString()}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token: `${token}`,
+        },
+      }
+    );
+
+    if (!allUser.ok) {
+      throw new Error(`Error: ${allUser.status} - ${allUser.statusText}`);
     }
-  );
-  const data = await allUser.json();
-  return (
-    <div className="w-full ">
-      <UserTable AllUsers={data} />
-    </div>
-  );
+
+    const data = await allUser.json();
+
+    return (
+      <div className="w-full">
+        <UserTable AllUsers={data} />
+      </div>
+    );
+  } catch (error) {
+    console.error("Failed to fetch users:", error);
+    return <div className="text-red-500">Failed to load user data.</div>;
+  }
 };
 
 export default Page;
