@@ -39,10 +39,18 @@ const Login = () => {
     },
   });
 
+  const handleGoogleLogin = async () => {
+    try {
+      router.replace(`${process.env.NEXT_PUBLIC_BASE_URL!}/auth/google`);
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+      console.error("Unexpected error:", error);
+    }
+  };
+
   const onSubmit = async (data: z.infer<typeof loginValidation>) => {
     setLoading(true);
     try {
-
       await axiosInstance.post("/login", data);
 
       toast.success("Login successful");
@@ -113,8 +121,25 @@ const Login = () => {
               </Button>
             </form>
           </Form>
+
+          <Button
+            type="button"
+            className="w-full mt-2"
+            variant="outline"
+            onClick={handleGoogleLogin}
+          >
+            Login with Google
+          </Button>
         </CardContent>
-        <CardFooter className="flex justify-center text-sm">
+        <CardFooter className="flex justify-center text-sm flex-col gap-2">
+          <div>
+            <Link
+              href="/forgot-password"
+              className="text-blue-600 hover:underline"
+            >
+              Forgot password?
+            </Link>
+          </div>
           <p>
             Don’t have an account?{" "}
             <Link href="/signup" className="text-blue-600 hover:underline">

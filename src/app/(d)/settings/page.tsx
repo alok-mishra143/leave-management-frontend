@@ -15,7 +15,6 @@ const Page = async () => {
         "Content-Type": "application/json",
         token: token,
       },
-      next: { revalidate: 60 },
     });
 
     if (!response.ok) {

@@ -20,6 +20,7 @@ import Filter from "./userFilter";
 import AddUser from "./AddUser";
 import CustomPagination from "../shared/Pagination";
 import { AllUsersProps } from "../../../..";
+import { CustomToolTip } from "./CustomToolTip";
 
 const TableHeadings = [
   { key: "name", label: "Name" },
@@ -105,7 +106,9 @@ const UserTable = ({ AllUsers }: { AllUsers: AllUsersProps }) => {
               <TableCell>{user.role}</TableCell>
               <TableCell>{user.department}</TableCell>
               <TableCell>{user.phone}</TableCell>
-              <TableCell>{user.address}</TableCell>
+              <TableCell>
+                <CustomToolTip full={user.address} />
+              </TableCell>
               <TableCell className="flex justify-center gap-2">
                 <UserEditDialog user={user} />
                 <Button

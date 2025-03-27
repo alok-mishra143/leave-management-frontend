@@ -59,24 +59,6 @@ const ApplyLeave = () => {
     },
   });
 
-  const getUserDetails = async () => {
-    try {
-      const token = await getCookie("token");
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/verify`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-        body: JSON.stringify({ token: token }),
-      });
-      const { user } = await res.json();
-      return user;
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-    }
-  };
-
   const getAllTeachers = async (department: string) => {
     try {
       const token = await getCookie("token");
@@ -100,10 +82,9 @@ const ApplyLeave = () => {
   const onSubmit = async (data: z.infer<typeof applyLeaveValidation>) => {
     setLoading(true);
     try {
-      const user = await getUserDetails();
       const token = await getCookie("token");
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/apply-leave/${user.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/apply-leave`,
         {
           method: "POST",
           headers: {

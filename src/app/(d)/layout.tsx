@@ -1,9 +1,7 @@
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import axiosInstance from "@/lib/customAxiosInstence";
 import { cookies } from "next/headers";
 import React from "react";
-import { userCookieInterface } from "../../..";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 
@@ -12,13 +10,23 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
   const token = cookieStore.get("token")?.value || "";
 
-  const respo = await axiosInstance.post("/me", { token });
-  const User: userCookieInterface = respo.data?.user || {};
+  const test = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/test`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      token: token,
+    },
+  });
+
+  const testDt = await test.json();
+  console.log("this is test data", testDt);
+
+  // console.log(respo.data);
 
   return (
     <div>
       <SidebarProvider defaultOpen={defaultOpen}>
-        <AppSidebar {...User} />
+        <AppSidebar {...testDt.user} />
 
         <main className="w-full overflow-hidden ">
           <header className="p-1 flex gap-2 flex-col">

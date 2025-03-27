@@ -46,7 +46,6 @@ interface Teacher {
 }
 
 const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
-  console.log(myLeave);
   const router = useRouter();
   const [allTeachers, setAllTeachers] = useState<Teacher[]>([]);
   const [loading, setLoading] = useState(false);

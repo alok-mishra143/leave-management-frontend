@@ -34,13 +34,13 @@ const CustomFooter = ({ user }: { user: userCookieInterface }) => {
       <SidebarMenuItem>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
-            <SidebarMenuButton className="flex items-center justify-between rounded-lg px-3 py-2 transition hover:bg-accent focus:ring-2 focus:ring-ring ">
-              <div className="flex items-center space-x-3">
+            <SidebarMenuButton className="flex items-center justify-between rounded-lg px-3 py-2 transition hover:bg-accent focus:ring-2 focus:ring-ring  ">
+              <div className="flex items-center space-x-3 ">
                 <Avatar className="h-9 w-9 border border-border rounded-full shadow-sm items-center justify-center">
                   <AvatarImage
                     src={currentUser.image}
                     alt={currentUser.name}
-                    className="h-9 w-9 rounded-full object-cover "
+                    className="h-8 w-8 rounded-full object-cover "
                   />
                   <AvatarFallback className="bg-muted text-sm font-medium uppercase">
                     {currentUser.name.charAt(0)}

@@ -13,7 +13,6 @@ import { createEventsServicePlugin } from "@schedule-x/events-service";
 
 import "@schedule-x/theme-shadcn/dist/index.css";
 import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
 
 interface CalendarAppProps {
   id: string;
@@ -23,10 +22,6 @@ interface CalendarAppProps {
 }
 
 function CalendarApp({ events }: { events: CalendarAppProps[] }) {
-  const { theme } = useTheme();
-
-  console.log(theme);
-  console.log(events);
   const eventsService = useState(() => createEventsServicePlugin())[0];
 
   const calendar = useCalendarApp({

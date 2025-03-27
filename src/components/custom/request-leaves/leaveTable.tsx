@@ -18,6 +18,7 @@ import UpdateLeave from "./updateLeave";
 import { LeaveType } from "@/global/constent";
 import CustomPagination from "../shared/Pagination";
 import { useRouter, useSearchParams } from "next/navigation";
+import { ArrowUpDown } from "lucide-react";
 
 const TableHeadings = [
   { key: "name", label: "Name" },
@@ -57,9 +58,19 @@ const LeaveTable = ({ Leaves }: { Leaves: leaveRequestsProps }) => {
       <Table className="w-full">
         <TableHeader>
           <TableRow>
-            {TableHeadings.map((heading, key) => (
-              <TableHead key={key} onClick={() => handleSort(heading.key)}>
-                {heading.label}
+            {TableHeadings.map(({ key, label }) => (
+              <TableHead key={key} onClick={() => handleSort(key)}>
+                <div className="flex gap-1 cursor-pointer">
+                  {label}
+                  {col === key && (
+                    <ArrowUpDown
+                      size={16}
+                      className={`transition-transform ${
+                        sort === "asc" ? "rotate-180" : ""
+                      }`}
+                    />
+                  )}
+                </div>
               </TableHead>
             ))}
           </TableRow>

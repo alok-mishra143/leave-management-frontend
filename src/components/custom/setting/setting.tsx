@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -13,7 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Building2, Camera, Mail, Phone, Shield, User2 } from "lucide-react";
+import { Building2, Mail, Phone, Shield, User2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +30,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getCookie } from "@/global/getCookie";
+import React from "react";
+import { toast } from "sonner";
+import ProfilePhoto from "../profile-photo/Profile";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -38,6 +43,8 @@ const profileSchema = z.object({
 });
 
 export default function SettingProfile(user: UserSettingsProps) {
+  const [loading, setLoading] = React.useState(false);
+  const router = useRouter();
   const form = useForm({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -48,8 +55,28 @@ export default function SettingProfile(user: UserSettingsProps) {
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit = async (data: any) => {
+    setLoading(true);
+    try {
+      const token = await getCookie("token");
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL!}/update-profile`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+        body: JSON.stringify(data),
+      });
+
+      toast.success("Profile updated successfully");
+
+      router.refresh();
+    } catch (error) {
+      toast.error("An unexpected error occurred");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -71,16 +98,10 @@ export default function SettingProfile(user: UserSettingsProps) {
                   </Avatar>
                   <label
                     htmlFor="picture"
-                    className="absolute bottom-0 right-0 p-2 backdrop-blur-3xl border rounded-full cursor-pointer hover:shadow-md transition-all"
+                    className="absolute bottom-0 right-0 p-2 backdrop-blur-3xl border rounded-full cursor-pointer hover:shadow-md transition-all "
                   >
-                    <Camera className="w-4 h-4" />
+                    <ProfilePhoto />
                   </label>
-                  <input
-                    type="file"
-                    id="picture"
-                    accept="image/*"
-                    className="hidden"
-                  />
                 </div>
               </div>
 
@@ -186,8 +207,12 @@ export default function SettingProfile(user: UserSettingsProps) {
               </div>
 
               <div className="flex justify-end pt-4">
-                <Button type="submit" className="w-full sm:w-auto">
-                  Save Changes
+                <Button
+                  type="submit"
+                  className="w-full sm:w-auto"
+                  disabled={loading}
+                >
+                  {loading ? "Loading..." : "Save Changes"}
                 </Button>
               </div>
             </form>

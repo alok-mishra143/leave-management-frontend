@@ -20,8 +20,6 @@ const page = async ({
       body: JSON.stringify({ token: token }),
     });
 
-    if (!getMe.ok) throw new Error("Failed to fetch user data");
-
     const { user } = await getMe.json();
     const { page, limit, status, search, col, sort } = await searchParams;
 
