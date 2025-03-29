@@ -1,3 +1,5 @@
+"use server";
+
 import SettingProfile from "@/components/custom/setting/setting";
 import { getCookie } from "@/global/getCookie";
 import React from "react";

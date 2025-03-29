@@ -1,3 +1,5 @@
+"use server";
+
 import CalendarApp from "@/components/custom/dashboard/LeaveCalender";
 import { getCookie } from "@/global/getCookie";
 import React from "react";

@@ -1,3 +1,5 @@
+"use server";
+
 import UserLeavesCards from "@/components/custom/leaves/userLeavesCards";
 import UserLeaveTable from "@/components/custom/leaves/userLeaveTable";
 import { getCookie } from "@/global/getCookie";
