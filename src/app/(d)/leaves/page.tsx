@@ -1,4 +1,5 @@
 "use server";
+export const dynamic = "force-dynamic";
 
 import UserLeavesCards from "@/components/custom/leaves/userLeavesCards";
 import UserLeaveTable from "@/components/custom/leaves/userLeaveTable";
@@ -19,6 +20,7 @@ const page = async ({
         "Content-Type": "application/json",
         token: token,
       },
+      cache: "no-store",
       body: JSON.stringify({ token: token }),
     });
 

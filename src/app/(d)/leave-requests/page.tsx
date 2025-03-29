@@ -1,4 +1,5 @@
 "use server";
+export const dynamic = "force-dynamic";
 
 import LeaveTable from "@/components/custom/request-leaves/leaveTable";
 import { getCookie } from "@/global/getCookie";
@@ -30,6 +31,7 @@ const Page = async ({
           "Content-Type": "application/json",
           token: `${token}`,
         },
+        cache: "no-store",
       }
     );
 

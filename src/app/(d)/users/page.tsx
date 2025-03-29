@@ -1,4 +1,5 @@
 "use server";
+export const dynamic = "force-dynamic";
 
 import React from "react";
 import { cookies } from "next/headers";
@@ -32,6 +33,7 @@ const Page = async ({
           "Content-Type": "application/json",
           token: `${token}`,
         },
+        cache: "no-store",
       }
     );
 

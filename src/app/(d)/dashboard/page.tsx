@@ -1,4 +1,5 @@
 "use server";
+export const dynamic = "force-dynamic";
 
 import CalendarApp from "@/components/custom/dashboard/LeaveCalender";
 import { getCookie } from "@/global/getCookie";
@@ -16,6 +17,7 @@ const page = async () => {
           "Content-Type": "application/json",
           token: token,
         },
+        cache: "no-store",
       }
     );
 
