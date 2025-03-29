@@ -1,3 +1,4 @@
+"use server";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { cookies } from "next/headers";
@@ -19,9 +20,6 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   });
 
   const testDt = await test.json();
-  // console.log("this is test data", testDt);
-
-  // console.log(respo.data);
 
   return (
     <div>

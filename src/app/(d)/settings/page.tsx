@@ -1,4 +1,3 @@
-"use server";
 export const dynamic = "force-dynamic";
 
 import SettingProfile from "@/components/custom/setting/setting";
@@ -18,7 +17,6 @@ const Page = async () => {
         "Content-Type": "application/json",
         token: token,
       },
-      cache: "no-store",
     });
 
     if (!response.ok) {

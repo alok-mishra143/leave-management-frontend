@@ -1,4 +1,3 @@
-"use server";
 export const dynamic = "force-dynamic";
 
 import UserLeavesCards from "@/components/custom/leaves/userLeavesCards";

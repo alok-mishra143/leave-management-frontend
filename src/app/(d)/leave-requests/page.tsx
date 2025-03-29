@@ -1,4 +1,3 @@
-"use server";
 export const dynamic = "force-dynamic";
 
 import LeaveTable from "@/components/custom/request-leaves/leaveTable";

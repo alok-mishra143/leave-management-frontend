@@ -1,4 +1,3 @@
-"use server";
 export const dynamic = "force-dynamic";
 
 import CalendarApp from "@/components/custom/dashboard/LeaveCalender";
