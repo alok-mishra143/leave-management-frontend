@@ -2,16 +2,15 @@
 
 import { LeaveStatus } from "@/global/constent";
 import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowUpDown, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import LeaveBadge from "../request-leaves/leaveBadge";
 import CustomPagination from "../shared/Pagination";
 import { LeaveRequestFilters } from "../shared/leaveFilter";
@@ -21,6 +20,7 @@ import { LeaveSchema } from "../../../..";
 import { Button } from "@/components/ui/button";
 import { getCookie } from "@/global/getCookie";
 import { toast } from "sonner";
+import CustomTableHeader from "../shared/TableHeader";
 
 interface Pagination {
   total: number;
@@ -51,20 +51,8 @@ const UserLeaveTable = ({
 }) => {
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const col = searchParams.get("col") || "startDate";
-  const sort = searchParams.get("sort") || "asc";
 
   const { data, pagination } = userLeaves;
-
-  const handleSort = (columnKey: string) => {
-    const newSort = col === columnKey && sort === "asc" ? "desc" : "asc";
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("col", columnKey);
-    params.set("sort", newSort);
-    router.push(`?${params.toString()}`);
-  };
 
   const deleteLeave = async (id: string) => {
     setLoading(true);
@@ -88,7 +76,7 @@ const UserLeaveTable = ({
   };
 
   return (
-    <div className="overflow-x-auto p-2">
+    <div>
       <div className=" flex justify-between items-center mb-4 p-2">
         <ApplyLeave />
         <LeaveRequestFilters />
@@ -96,28 +84,8 @@ const UserLeaveTable = ({
 
       <Table>
         <TableHeader>
-          <TableRow>
-            {TableHeadings.map(({ key, label }) => (
-              <TableHead key={key} onClick={() => handleSort(key)}>
-                <div className="flex gap-1 items-center cursor-pointer">
-                  {label}
-                  <ArrowUpDown
-                    size={16}
-                    className={`transition-transform ${
-                      col === key
-                        ? sort === "asc"
-                          ? "rotate-180"
-                          : ""
-                        : "opacity-30"
-                    }`}
-                  />
-                </div>
-              </TableHead>
-            ))}
-            <TableHead>Action</TableHead>
-          </TableRow>
+          <CustomTableHeader TableHeadings={TableHeadings} />
         </TableHeader>
-
         <TableBody>
           {data.length > 0 ? (
             data.map((leave) => (

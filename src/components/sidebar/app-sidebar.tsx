@@ -28,7 +28,7 @@ const sidebarItems = [
     icon: NotepadText,
     label: "Leaves",
     href: "/leaves",
-    roles: [Role.STUDENT, Role.STAFF],
+    roles: [Role.STUDENT, Role.STAFF, Role.ADMIN],
   },
   {
     icon: Calendar1,

@@ -1,16 +1,15 @@
 "use client";
 
 import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Trash2, Loader, ArrowUpDown } from "lucide-react";
+import { Trash2, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import UserEditDialog from "./userEditDialog";
 import axiosInstance from "@/lib/customAxiosInstence";
@@ -21,6 +20,7 @@ import AddUser from "./AddUser";
 import CustomPagination from "../shared/Pagination";
 import { AllUsersProps } from "../../../..";
 import { CustomToolTip } from "./CustomToolTip";
+import CustomTableHeader from "../shared/TableHeader";
 
 const TableHeadings = [
   { key: "name", label: "Name" },
@@ -33,23 +33,9 @@ const TableHeadings = [
 
 const UserTable = ({ AllUsers }: { AllUsers: AllUsersProps }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const col = searchParams.get("col") || "name";
-  const sort = searchParams.get("sort") || "asc";
 
   const { data, pagination } = AllUsers;
   const [deletingUser, setDeletingUser] = React.useState<string | null>(null);
-
-  const handleSort = (columnKey: string) => {
-    const newSort = col === columnKey && sort === "asc" ? "desc" : "asc";
-
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("col", columnKey);
-    params.set("sort", newSort);
-
-    router.push(`?${params.toString()}`);
-  };
 
   // Delete user function
   const deleteHandler = async (id: string) => {
@@ -79,24 +65,7 @@ const UserTable = ({ AllUsers }: { AllUsers: AllUsersProps }) => {
       {/* User Table */}
       <Table>
         <TableHeader>
-          <TableRow>
-            {TableHeadings.map(({ key, label }) => (
-              <TableHead key={key} onClick={() => handleSort(key)}>
-                <div className="flex gap-1 cursor-pointer">
-                  {label}
-                  {col === key && (
-                    <ArrowUpDown
-                      size={16}
-                      className={`transition-transform ${
-                        sort === "asc" ? "rotate-180" : ""
-                      }`}
-                    />
-                  )}
-                </div>
-              </TableHead>
-            ))}
-            <TableHead>Action</TableHead>
-          </TableRow>
+          <CustomTableHeader TableHeadings={TableHeadings} />
         </TableHeader>
         <TableBody>
           {data?.map((user) => (

@@ -7,6 +7,7 @@ import { loginValidation } from "@/lib/validations/userValidation";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { motion } from "motion/react";
 import {
   Card,
   CardContent,
@@ -70,7 +71,12 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center px-4">
+    <motion.div
+      className="h-screen flex items-center justify-center px-4"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <Card className="max-w-sm w-full rounded-lg">
         <CardHeader>
           <CardTitle className="text-center text-xl">Login</CardTitle>
@@ -148,7 +154,7 @@ const Login = () => {
           </p>
         </CardFooter>
       </Card>
-    </div>
+    </motion.div>
   );
 };
 

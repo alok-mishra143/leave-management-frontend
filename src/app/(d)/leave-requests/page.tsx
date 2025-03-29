@@ -38,7 +38,7 @@ const Page = async ({
     const data = await leaves.json();
 
     return (
-      <div className="w-full">
+      <div>
         <LeaveTable Leaves={data} />
       </div>
     );

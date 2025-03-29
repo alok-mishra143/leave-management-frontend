@@ -42,7 +42,7 @@ const Page = async ({
     const data = await allUser.json();
 
     return (
-      <div className="w-full">
+      <div>
         <UserTable AllUsers={data} />
       </div>
     );

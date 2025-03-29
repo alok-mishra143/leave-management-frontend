@@ -7,7 +7,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
@@ -17,8 +16,8 @@ import { LeaveRequestFilters } from "../shared/leaveFilter";
 import UpdateLeave from "./updateLeave";
 import { LeaveType } from "@/global/constent";
 import CustomPagination from "../shared/Pagination";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowUpDown } from "lucide-react";
+import CustomTableHeader from "../shared/TableHeader";
+import { Separator } from "@/components/ui/separator";
 
 const TableHeadings = [
   { key: "name", label: "Name" },
@@ -30,50 +29,18 @@ const TableHeadings = [
   { key: "status", label: "Status" },
   { key: "requestedTo", label: "Requested To" },
   { key: "approvedBy", label: "Approved By" },
-  { key: "actions", label: "Actions" },
 ];
 
 const LeaveTable = ({ Leaves }: { Leaves: leaveRequestsProps }) => {
   const { data, pagination } = Leaves;
 
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const col = searchParams.get("col") || "name";
-  const sort = searchParams.get("sort") || "asc";
-
-  const handleSort = (columnKey: string) => {
-    const newSort = col === columnKey && sort === "asc" ? "desc" : "asc";
-
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("col", columnKey);
-    params.set("sort", newSort);
-
-    router.push(`?${params.toString()}`);
-  };
-
   return (
-    <div className="overflow-x-auto">
+    <div className="flex flex-col gap-5">
       <LeaveRequestFilters />
-      <Table className="w-full">
+      <Separator />
+      <Table>
         <TableHeader>
-          <TableRow>
-            {TableHeadings.map(({ key, label }) => (
-              <TableHead key={key} onClick={() => handleSort(key)}>
-                <div className="flex gap-1 cursor-pointer">
-                  {label}
-                  {col === key && (
-                    <ArrowUpDown
-                      size={16}
-                      className={`transition-transform ${
-                        sort === "asc" ? "rotate-180" : ""
-                      }`}
-                    />
-                  )}
-                </div>
-              </TableHead>
-            ))}
-          </TableRow>
+          <CustomTableHeader TableHeadings={TableHeadings} />
         </TableHeader>
 
         <TableBody>
@@ -84,11 +51,9 @@ const LeaveTable = ({ Leaves }: { Leaves: leaveRequestsProps }) => {
               <TableCell>{leave.leaveType as LeaveType}</TableCell>
               <TableCell>{leave.reason}</TableCell>
               <TableCell>
-                {" "}
                 {new Date(leave.startDate).toLocaleDateString()}
               </TableCell>
               <TableCell>
-                {" "}
                 {new Date(leave.endDate).toLocaleDateString()}
               </TableCell>
               <TableCell>

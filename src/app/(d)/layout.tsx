@@ -19,7 +19,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   });
 
   const testDt = await test.json();
-  console.log("this is test data", testDt);
+  // console.log("this is test data", testDt);
 
   // console.log(respo.data);
 
