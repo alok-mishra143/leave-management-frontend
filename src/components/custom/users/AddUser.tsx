@@ -162,7 +162,6 @@ const AddUser = () => {
                         <SelectGroup>
                           <SelectItem value="CSE">CSE</SelectItem>
                           <SelectItem value="EEE">EEE</SelectItem>
-                          <SelectItem value="ADMIN">Admin</SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -218,7 +217,6 @@ const AddUser = () => {
                     </FormControl>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem value={Role.ADMIN}>Admin</SelectItem>
                         <SelectItem value={Role.STAFF}>Staff</SelectItem>
                         <SelectItem value={Role.HOD}>HOD</SelectItem>
                         <SelectItem value={Role.STUDENT}>Student</SelectItem>

@@ -16,7 +16,7 @@ const UserLeavesCards: React.FC<UserLeavesCardsProps> = ({
   const leavePercentage = (usedLeaves / totalLeaves) * 100;
 
   const leaveData = [
-    { title: "Total Leaves", value: totalLeaves, className: "" },
+    { title: "Total Leaves", value: totalLeaves, className: "text-indigo-600" },
     {
       title: "Available Leaves",
       value: availableLeave,
@@ -28,8 +28,11 @@ const UserLeavesCards: React.FC<UserLeavesCardsProps> = ({
       className: "text-red-500",
       extra: (
         <>
-          <Separator className="my-2" />
-          <Progress value={leavePercentage} className="h-2" />
+          <Separator className="my-3" />
+          <Progress
+            value={leavePercentage}
+            className="h-2 rounded-md bg-gradient-to-r from-green-400 to-red-500"
+          />
           <p className="text-sm mt-2 text-gray-600">
             {leavePercentage.toFixed(1)}% used
           </p>
@@ -39,17 +42,21 @@ const UserLeavesCards: React.FC<UserLeavesCardsProps> = ({
   ];
 
   return (
-    <div className="grid gap-4 sm:grid-cols-3 p-2">
+    <div className="grid gap-4 sm:grid-cols-3 p-4">
       {leaveData.map(({ title, value, className, extra }) => (
         <Card
           key={title}
-          className="shadow-lg border border-gray-800 rounded-2xl p-4"
+          className="shadow-xl border border-gray-800 rounded-2xl p-4 transition-all transform hover:scale-105 hover:shadow-2xl  hover:from-gray-700"
         >
-          <CardHeader className="text-center">
-            <CardTitle className="text-lg font-semibold">{title}</CardTitle>
+          <CardHeader className="text-center mb-4">
+            <CardTitle className="text-xl font-semibold text-white">
+              {title}
+            </CardTitle>
           </CardHeader>
           <CardContent className="text-center">
-            <span className={`text-2xl font-bold ${className}`}>{value}</span>
+            <span className={`text-3xl font-bold ${className} block mb-2`}>
+              {value}
+            </span>
             {extra}
           </CardContent>
         </Card>

@@ -154,14 +154,10 @@ const Signup = () => {
                     <FormLabel>Phone No</FormLabel>
                     <FormControl>
                       <Input
-                        type="number"
+                        type="string"
                         placeholder="1111111111"
                         autoComplete="tel"
-                        value={field.value || ""}
-                        onChange={(e) => {
-                          const val = e.target.value;
-                          field.onChange(val === "" ? "" : Number(val));
-                        }}
+                        {...field}
                         onWheel={(e) => e.currentTarget.blur()}
                       />
                     </FormControl>

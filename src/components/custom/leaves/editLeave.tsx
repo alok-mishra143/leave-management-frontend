@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
+
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -7,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { getCookie } from "@/global/getCookie";
 import { applyLeaveValidation } from "@/lib/validations/applyLeaveValidation";
-import { Pen } from "lucide-react";
+import { Pen, Loader2 } from "lucide-react"; // Import spinner icon
 
 import { Button } from "@/components/ui/button";
 import {
@@ -48,7 +49,8 @@ interface Teacher {
 const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
   const router = useRouter();
   const [allTeachers, setAllTeachers] = useState<Teacher[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingTeachers, setLoadingTeachers] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [open, setOpen] = useState(false);
 
   const form = useForm<z.infer<typeof applyLeaveValidation>>({
@@ -72,49 +74,31 @@ const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
     });
   }, [myLeave, form]);
 
-  const getUserDetails = async () => {
+  const getAllTeachers = async () => {
+    setLoadingTeachers(true);
     try {
       const token = await getCookie("token");
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/verify`, {
-        method: "POST",
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/staff`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           token: token,
         },
-        body: JSON.stringify({ token: token }),
       });
-      const { user } = await res.json();
-      return user;
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-    }
-  };
-
-  const getAllTeachers = async (department: string) => {
-    try {
-      const token = await getCookie("token");
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/staff/${department}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-        }
-      );
       const gotTeachers = await res.json();
       setAllTeachers(gotTeachers.data);
     } catch (error) {
       console.error("Error fetching teachers:", error);
+    } finally {
+      setLoadingTeachers(false);
     }
   };
 
   const onSubmit = async (data: z.infer<typeof applyLeaveValidation>) => {
-    setLoading(true);
+    setLoadingSubmit(true);
     try {
       console.log("update request submitted:", data);
-      const user = await getUserDetails();
+
       const token = await getCookie("token");
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/edit-leave/${myLeave.id}`,
@@ -139,7 +123,7 @@ const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
     } catch (error) {
       console.error("Error submitting leave request:", error);
     } finally {
-      setLoading(false);
+      setLoadingSubmit(false);
     }
   };
 
@@ -147,30 +131,15 @@ const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="ghost">
+          <Button variant="ghost" onClick={getAllTeachers}>
             <Pen />
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[505px]">
           <DialogHeader>
-            <DialogTitle>Apply for Leave</DialogTitle>
+            <DialogTitle>Edit Leave Request</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            {/* Department Selection */}
-            <Select onValueChange={(value) => getAllTeachers(value)}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Department" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value={Deparment.CSE}>CSE</SelectItem>
-                  <SelectItem value={Deparment.ADMIN}>ADMIN</SelectItem>
-                  <SelectItem value={Deparment.EEE}>EEE</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-
-            {/* Leave Application Form */}
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -200,7 +169,7 @@ const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
                       <FormItem className="w-1/2">
                         <FormLabel>Start Date</FormLabel>
                         <FormControl>
-                          <Input
+                          <input
                             type="date"
                             {...field}
                             value={field.value}
@@ -212,7 +181,6 @@ const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
                       </FormItem>
                     )}
                   />
-
                   <FormField
                     control={form.control}
                     name="endDate"
@@ -220,7 +188,7 @@ const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
                       <FormItem className="w-1/2">
                         <FormLabel>End Date</FormLabel>
                         <FormControl>
-                          <Input
+                          <input
                             type="date"
                             {...field}
                             value={field.value}
@@ -228,42 +196,46 @@ const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
                             className="w-full border rounded px-2 py-1"
                           />
                         </FormControl>
+
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 </div>
 
-                {/* Requested To Field */}
+                {/* Requested To Field with Loading */}
                 <FormField
                   control={form.control}
                   name="requestedTo"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Request To</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
+                      <Select onValueChange={field.onChange}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="w-[180px]">
                             <SelectValue
                               placeholder={
-                                allTeachers.length === 0
-                                  ? "Select Department First"
-                                  : "Select Person"
+                                loadingTeachers
+                                  ? "Loading..."
+                                  : myLeave.requestedTo.name
                               }
                             />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectGroup>
-                            {allTeachers.map((teacher) => (
-                              <SelectItem key={teacher.id} value={teacher.id}>
-                                {teacher.name}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
+                          {loadingTeachers ? (
+                            <div className="p-4 flex justify-center">
+                              <Loader2 className="animate-spin h-5 w-5 text-gray-500" />
+                            </div>
+                          ) : (
+                            <SelectGroup>
+                              {allTeachers.map((teacher) => (
+                                <SelectItem key={teacher.id} value={teacher.id}>
+                                  {teacher.name}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          )}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -271,12 +243,13 @@ const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
                   )}
                 />
 
+                {/* Leave Type Field */}
                 <FormField
                   control={form.control}
                   name="leaveType"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>LeaveType </FormLabel>
+                      <FormLabel>Leave Type</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
@@ -292,7 +265,7 @@ const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
                               HALF DAY
                             </SelectItem>
                             <SelectItem value={LeaveType.FULL_DAY}>
-                              Full DAY
+                              FULL DAY
                             </SelectItem>
                           </SelectGroup>
                         </SelectContent>
@@ -304,19 +277,15 @@ const EditLeave = ({ myLeave }: { myLeave: LeaveSchema }) => {
 
                 {/* Submit & Cancel Buttons */}
                 <DialogFooter>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                      setOpen(false);
-
-                      form.reset();
-                    }}
-                  >
+                  <Button variant="outline" onClick={() => setOpen(false)}>
                     Cancel
                   </Button>
-                  <Button type="submit" disabled={loading}>
-                    {loading ? "Submitting..." : "Submit Leave Request"}
+                  <Button type="submit" disabled={loadingSubmit}>
+                    {loadingSubmit ? (
+                      <Loader2 className="animate-spin h-5 w-5" />
+                    ) : (
+                      "Submit Leave Request"
+                    )}
                   </Button>
                 </DialogFooter>
               </form>

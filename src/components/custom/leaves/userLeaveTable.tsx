@@ -1,7 +1,7 @@
 "use client";
 
 import { LeaveStatus } from "@/global/constent";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Table,
@@ -49,13 +49,13 @@ const UserLeaveTable = ({
 }: {
   userLeaves: UserLeaveTableProps;
 }) => {
-  const [loading, setLoading] = React.useState(false);
+  const [loadingLeaveId, setLoadingLeaveId] = useState<string | null>(null);
   const router = useRouter();
 
   const { data, pagination } = userLeaves;
 
   const deleteLeave = async (id: string) => {
-    setLoading(true);
+    setLoadingLeaveId(id);
     try {
       const token = await getCookie("token");
       await fetch(`${process.env.NEXT_PUBLIC_BASE_URL!}/delete-leave/${id}`, {
@@ -71,7 +71,7 @@ const UserLeaveTable = ({
       toast.error("Failed to delete leave.");
       console.error(error);
     } finally {
-      setLoading(false);
+      setLoadingLeaveId(null);
     }
   };
 
@@ -91,7 +91,11 @@ const UserLeaveTable = ({
             data.map((leave) => (
               <TableRow
                 key={leave.id}
-                className={loading ? "animate-pulse opacity-50" : ""}
+                className={
+                  loadingLeaveId === leave.id
+                    ? "animate-pulse opacity-70 blur-[1px] transition-all duration-300"
+                    : "transition-all duration-300"
+                }
               >
                 <TableCell>{leave.requestedTo.name}</TableCell>
                 <TableCell>{leave.approvedBy?.name || "N/A"}</TableCell>
@@ -110,15 +114,16 @@ const UserLeaveTable = ({
                   {leave.status === LeaveStatus.PENDING && (
                     <div
                       className={
-                        loading
+                        loadingLeaveId === leave.id
                           ? "animate-pulse flex gap-1 opacity-30"
-                          : "flex gap-1"
+                          : "flex gap-1 "
                       }
                     >
                       <EditLeave myLeave={leave} />
                       <Button
                         variant={"ghost"}
                         onClick={() => deleteLeave(leave.id)}
+                        disabled={loadingLeaveId === leave.id}
                       >
                         <Trash className="text-red-600" />
                       </Button>

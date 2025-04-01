@@ -12,7 +12,8 @@ const Page = async ({
   try {
     const token = await getCookie("token");
 
-    const { page, limit, status, search, col, sort } = await searchParams;
+    const { page, limit, status, search, col, sort, leave } =
+      await searchParams;
 
     const queryParams = new URLSearchParams();
     if (page) queryParams.append("page", String(page));
@@ -21,6 +22,7 @@ const Page = async ({
     if (search) queryParams.append("search", String(search));
     if (col) queryParams.append("col", String(col));
     if (sort) queryParams.append("sort", String(sort));
+    if (leave) queryParams.append("leave", String(leave));
 
     const leaves = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL!}/leaves?${queryParams.toString()}`,

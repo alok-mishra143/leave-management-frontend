@@ -36,6 +36,7 @@ import {
 } from "@/components/ui/select";
 import { Deparment, LeaveType } from "@/global/constent";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 interface Teacher {
   id: string;
@@ -45,6 +46,8 @@ interface Teacher {
 const ApplyLeave = () => {
   const router = useRouter();
   const [allTeachers, setAllTeachers] = useState<Teacher[]>([]);
+  const [loadingTeachers, setLoadingTeachers] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -59,23 +62,23 @@ const ApplyLeave = () => {
     },
   });
 
-  const getAllTeachers = async (department: string) => {
+  const getAllTeachers = async () => {
+    setLoadingTeachers(true);
     try {
       const token = await getCookie("token");
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/staff/${department}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
-        }
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/staff`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          token: token,
+        },
+      });
       const gotTeachers = await res.json();
       setAllTeachers(gotTeachers.data);
     } catch (error) {
       console.error("Error fetching teachers:", error);
+    } finally {
+      setLoadingTeachers(false);
     }
   };
 
@@ -114,27 +117,21 @@ const ApplyLeave = () => {
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline">Apply Leave</Button>
+          <Button
+            variant={"outline"}
+            onClick={() => {
+              getAllTeachers();
+              form.reset();
+            }}
+          >
+            Apply Leave
+          </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[505px]">
           <DialogHeader>
             <DialogTitle>Apply for Leave</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            {/* Department Selection */}
-            <Select onValueChange={(value) => getAllTeachers(value)}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Department" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value={Deparment.CSE}>CSE</SelectItem>
-                  <SelectItem value={Deparment.ADMIN}>ADMIN</SelectItem>
-                  <SelectItem value={Deparment.EEE}>EEE</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-
             {/* Leave Application Form */}
             <Form {...form}>
               <form
@@ -193,6 +190,7 @@ const ApplyLeave = () => {
                             className="w-full border rounded px-2 py-1"
                           />
                         </FormControl>
+
                         <FormMessage />
                       </FormItem>
                     )}
@@ -211,24 +209,30 @@ const ApplyLeave = () => {
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="w-[180px]">
                             <SelectValue
                               placeholder={
-                                allTeachers.length === 0
-                                  ? "Select Department First"
-                                  : "Select Person"
+                                loadingTeachers
+                                  ? "Loading..."
+                                  : "Select Teacher"
                               }
                             />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectGroup>
-                            {allTeachers.map((teacher) => (
-                              <SelectItem key={teacher.id} value={teacher.id}>
-                                {teacher.name}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
+                          {loadingTeachers ? (
+                            <div className="p-4 flex justify-center">
+                              <Loader2 className="animate-spin h-5 w-5 text-gray-500" />
+                            </div>
+                          ) : (
+                            <SelectGroup>
+                              {allTeachers.map((teacher) => (
+                                <SelectItem key={teacher.id} value={teacher.id}>
+                                  {teacher.name}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          )}
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -272,7 +276,11 @@ const ApplyLeave = () => {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setOpen(false)}
+                    onClick={() => {
+                      setOpen(false);
+                      form.reset();
+                      setAllTeachers([]);
+                    }}
                   >
                     Cancel
                   </Button>
