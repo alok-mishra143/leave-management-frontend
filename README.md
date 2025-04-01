@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+https://github.com/user-attachments/assets/8c4266ba-a66a-427e-949a-748200ffebb1
 
-## Getting Started
+backend:-https://github.com/alok-mishra143/leave-management-backend
 
-First, run the development server:
+# Leave Management System
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![Leave Management System](https://img.shields.io/badge/Status-Active-green.svg) ![Built with Next.js](https://img.shields.io/badge/Built%20With-Next.js-blue.svg) ![Tailwind CSS](https://img.shields.io/badge/Styled%20With-TailwindCSS-38B2AC.svg)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Overview
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The **Leave Management System** is a web application designed for colleges to manage leave requests efficiently. It allows students to request leaves, staff and HODs to approve or reject them, and admins to oversee the entire leave process. Built using **Next.js, Tailwind CSS, Prisma, and PostgreSQL**.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Features
 
-## Learn More
+- 🌟 Student leave request submission
+- ✅ Staff and HOD leave approval workflow
+- 📊 Dashboard for tracking leave history
+- 📅 Calendar integration to visualize leaves
+- 🔐 Authentication with Supabase Auth
+- 📜 Role-based access control (**Admin, HOD, Staff, Student**)
+- 📌 Notifications for leave status updates
 
-To learn more about Next.js, take a look at the following resources:
+## 🎭 User Roles
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Admin** - Manages the entire system, users, and settings.
+2. **HOD (Head of Department)** - Approves or rejects staff and student leaves.
+3. **Staff** - Can apply for leave and approve/reject student leave requests.
+4. **Student** - Can apply for leave, track status, and receive notifications.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Tech Stack
 
-## Deploy on Vercel
+- **Frontend:** Next.js, Tailwind CSS, Shadcn UI, Framer Motion
+- **Backend:** Prisma, PostgreSQL
+- **Database:** PostgreSQL
+- **Authentication:** Supabase Auth
+- **State Management:** React Context API
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📸 Screenshots
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Calendar View                                                                             | Leave Request Form                                                                        | Profile Setting                                                                           |
+| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| ![image](https://github.com/user-attachments/assets/83f62886-8165-4b2d-b994-f6076c946105) | ![image](https://github.com/user-attachments/assets/f8a0b967-91d1-4553-a739-a36b3cd7d3b0) | ![image](https://github.com/user-attachments/assets/719132ff-242c-4141-a455-28df6828764f) |
