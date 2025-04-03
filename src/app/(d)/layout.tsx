@@ -22,17 +22,15 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
   const testDt = await test.json();
 
   return (
-    <div>
+    <div className="relative">
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar {...testDt.user} />
+        <div className="fixed top-1 left-2 z-50  ">
+          <SidebarTrigger />
+        </div>
 
-        <main className="w-full overflow-hidden ">
-          <header className="p-1 flex gap-2 flex-col">
-            {" "}
-            <div className="flex justify-between items-center">
-              {" "}
-              <SidebarTrigger />
-            </div>
+        <main className="w-full overflow-hidden">
+          <header className="p-1 flex flex-col gap-2">
             <Separator />
           </header>
           <div className="p-5">{children}</div>

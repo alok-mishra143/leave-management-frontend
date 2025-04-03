@@ -6,7 +6,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarHeader,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { Role } from "@/global/constent";
@@ -60,6 +59,13 @@ const sidebarItems = [
     ],
     roles: [Role.ADMIN, Role.STAFF, Role.HOD],
   },
+
+  {
+    icon: ScanText,
+    label: "Report",
+    href: "/report",
+    roles: [Role.ADMIN],
+  },
 ];
 
 export function AppSidebar(user: userCookieInterface) {
@@ -71,9 +77,8 @@ export function AppSidebar(user: userCookieInterface) {
 
   return (
     <Sidebar>
-      <SidebarHeader>Menu</SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="mt-10">
           {filteredItems.map((item, index) => (
             <SidebarGroupContent key={index}>
               {/* Main item */}
@@ -118,7 +123,7 @@ export function AppSidebar(user: userCookieInterface) {
           ))}
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="p-3">
+      <SidebarFooter className="p-5">
         <CustomFooter user={user} />
       </SidebarFooter>
     </Sidebar>
