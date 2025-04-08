@@ -81,3 +81,15 @@ export interface LeaveSchema {
   reason: string;
   createdAt: string;
 }
+
+interface BlogCardProps {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  createdAt: Date;
+}
+interface BlogsProps {
+  data: BlogCardProps[];
+  pagination: pagination;
+}

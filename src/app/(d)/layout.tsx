@@ -33,7 +33,7 @@ const layout = async ({ children }: { children: React.ReactNode }) => {
           <header className="p-1 flex flex-col gap-2">
             <Separator />
           </header>
-          <div className="p-5">{children}</div>
+          <div className="p-5 h-screen">{children}</div>
         </main>
       </SidebarProvider>
     </div>

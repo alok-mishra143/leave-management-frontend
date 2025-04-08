@@ -15,6 +15,8 @@ import {
   NotepadText,
   Calendar1,
   ChevronRight,
+  ScanText,
+  Book,
 } from "lucide-react";
 import CustomFooter from "./sideBarPopover";
 import Link from "next/link";
@@ -65,6 +67,12 @@ const sidebarItems = [
     label: "Report",
     href: "/report",
     roles: [Role.ADMIN],
+  },
+  {
+    icon: Book,
+    label: "Blogs",
+    href: "/blogs",
+    roles: [Role.ADMIN, Role.STUDENT],
   },
 ];
 
