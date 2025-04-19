@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,7 +48,6 @@ const Navbar = () => {
             </nav>
 
             <div className="hidden md:flex items-center space-x-4">
-              <ThemeToggle />
               <Button
                 variant="outline"
                 size="sm"
@@ -65,7 +63,6 @@ const Navbar = () => {
 
             {/* Mobile menu button */}
             <div className="md:hidden flex items-center space-x-2">
-              <ThemeToggle />
               <Button
                 variant="ghost"
                 size="icon"

@@ -24,7 +24,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import axiosInstance from "@/lib/customAxiosInstence";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -52,7 +51,21 @@ const Login = () => {
   const onSubmit = async (data: z.infer<typeof loginValidation>) => {
     setLoading(true);
     try {
-      await axiosInstance.post("/login", data);
+      // await axiosInstance.post("/login", data);
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL!}/login`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      console.log(response);
 
       toast.success("Login successful");
 
