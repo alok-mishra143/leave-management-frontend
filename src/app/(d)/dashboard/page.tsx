@@ -1,38 +1,24 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const dynamic = "force-dynamic";
 
 import CalendarApp from "@/components/custom/dashboard/LeaveCalender";
-import { getCookie } from "@/global/getCookie";
-import React from "react";
+import { customFetch } from "@/lib/customRCS";
+import React, { use } from "react";
 
-const page = async () => {
-  try {
-    const token = await getCookie("token");
+interface DashboardResponse {
+  data: any[];
+}
 
-    const leaves = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL!}/dashboard`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          token: token,
-        },
-        cache: "no-store",
-      }
-    );
+const Page = () => {
+  const url = `${process.env.NEXT_PUBLIC_BASE_URL!}/dashboard`;
+  const data = use(customFetch({ url })) as DashboardResponse;
 
-    if (!leaves.ok) throw new Error("Failed to fetch dashboard data");
-
-    const data = await leaves.json();
-
-    return (
-      <div className="overflow-hidden h-full">
-        <CalendarApp events={data.data} />
-      </div>
-    );
-  } catch (error) {
-    console.error("Error fetching dashboard data: ", error);
-    return <div>Failed to load calendar. Please try again later.</div>;
-  }
+  return (
+    <div className="overflow-hidden h-full">
+      <CalendarApp events={data.data} />
+      hhh
+    </div>
+  );
 };
 
-export default page;
+export default Page;

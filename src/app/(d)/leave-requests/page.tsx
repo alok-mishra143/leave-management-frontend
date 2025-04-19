@@ -1,8 +1,9 @@
 export const dynamic = "force-dynamic";
 
 import LeaveTable from "@/components/custom/request-leaves/leaveTable";
-import { getCookie } from "@/global/getCookie";
+import { customFetch } from "@/lib/customRCS";
 import React from "react";
+import { leaveRequestsProps } from "../../../..";
 
 const Page = async ({
   searchParams,
@@ -10,8 +11,6 @@ const Page = async ({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
   try {
-    const token = await getCookie("token");
-
     const { page, limit, status, search, col, sort, leave } =
       await searchParams;
 
@@ -24,21 +23,10 @@ const Page = async ({
     if (sort) queryParams.append("sort", String(sort));
     if (leave) queryParams.append("leave", String(leave));
 
-    const leaves = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL!}/leaves?${queryParams.toString()}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          token: `${token}`,
-        },
-        cache: "no-store",
-      }
-    );
+    const url = `${process.env
+      .NEXT_PUBLIC_BASE_URL!}/leaves?${queryParams.toString()}`;
 
-    if (!leaves.ok) throw new Error("Failed to fetch leaves");
-
-    const data = await leaves.json();
+    const data: leaveRequestsProps = await customFetch({ url });
 
     return (
       <div>
